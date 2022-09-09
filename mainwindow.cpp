@@ -41,16 +41,16 @@ MainWindow::~MainWindow()
 void MainWindow::on_start_server_clicked()
 {
     //当前选择的ip
-        QString ip = ui->server_ip->currentText();
-        //端口
-        int port = ui->listen_com->currentText().toInt();
-        QHostAddress addr(ip);
-        //监听
-        m_tcpServer->listen(addr,port);
-        ui->log_show->append("开始监听！");
-        ui->log_show->append("**服务器地址: "+m_tcpServer->serverAddress().toString());
-        ui->log_show->append("**服务器端口: "+QString::number(m_tcpServer->serverPort()));
-        ui->listen_state->setText("正在监听");
+    QString ip = ui->server_ip->currentText();
+    //端口
+    int port = ui->listen_com->currentText().toInt();
+    QHostAddress addr(ip);
+    //监听
+    m_tcpServer->listen(addr,port);
+    ui->log_show->append("开始监听！");
+    ui->log_show->append("**服务器地址: "+m_tcpServer->serverAddress().toString());
+    ui->log_show->append("**服务器端口: "+QString::number(m_tcpServer->serverPort()));
+    ui->listen_state->setText("正在监听");
 
 
 }
