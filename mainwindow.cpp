@@ -2,12 +2,15 @@
 #include "ui_mainwindow.h"
 
 #include <QHostInfo>
+#include<QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setWindowTitle("服务器");
     //本地主机名
     QString hostName = QHostInfo::localHostName();
 
@@ -30,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     m_tcpServer = new QTcpServer(this);
     connect(m_tcpServer,&QTcpServer::newConnection,this,&MainWindow::on_newConnection);
+    my_database=new Database();
 
 }
 
@@ -47,6 +51,8 @@ void MainWindow::on_start_server_clicked()
     QHostAddress addr(ip);
     //监听
     m_tcpServer->listen(addr,port);
+    ui->start_server->setDisabled(true);
+    ui->stop_server->setDisabled(false);
     ui->log_show->append("开始监听！");
     ui->log_show->append("**服务器地址: "+m_tcpServer->serverAddress().toString());
     ui->log_show->append("**服务器端口: "+QString::number(m_tcpServer->serverPort()));
@@ -59,9 +65,12 @@ void MainWindow::on_stop_server_clicked()
 {
     if(m_tcpServer->isListening())
        {
+
            m_tcpServer->close();
            ui->listen_state->setText("停止监听");
            ui->log_show->append("**停止监听**");
+           ui->stop_server->setDisabled(true);
+           ui->start_server->setDisabled(false);
        }
 
 }
@@ -73,5 +82,51 @@ void MainWindow::on_clear_data_clicked()
 
 void MainWindow::on_newConnection()
 {
+    static int count=0;
+    m_tcpSocket = m_tcpServer->nextPendingConnection();
+    count++;
+    connect(m_tcpSocket,&QTcpSocket::connected,this,&MainWindow::onConnected);
+    connect(m_tcpSocket,&QTcpSocket::disconnected,this,&MainWindow::onDisConnected);
+   // connect(m_tcpSocket,&QTcpSocket::stateChanged,this,&MainWindow::onStateChanged);
+    connect(m_tcpSocket,&QTcpSocket::readyRead,this,&MainWindow::onReadyRead);
+    ui->log_show->append("** client socket connected");
+    ui->log_show->append("** peer address: "+m_tcpSocket->peerAddress().toString());
+    ui->log_show->append("** peer port: "+QString::number(m_tcpSocket->peerPort()));
+  // qDebug()<<count;
+}
+
+
+void MainWindow::onConnected()
+{
+    ui->log_show->append("** client socket connected");
+    ui->log_show->append("** peer address: "+m_tcpSocket->peerAddress().toString());
+    ui->log_show->append("** peer port: "+QString::number(m_tcpSocket->peerPort()));
+}
+
+void MainWindow::onDisConnected()
+{
+    ui->log_show->append("** client socket disconnected");
+    m_tcpSocket->deleteLater();
+}
+
+void MainWindow::on_Send_data_clicked()
+{
+    QString msg =ui->data_to_send->toPlainText();
+    ui->log_show->append("server:"+msg);
+    QByteArray str = msg.toUtf8();
+    str.append('\n');
+    m_tcpSocket->write(str);
+}
+
+void MainWindow::onReadyRead()
+{
+     QString recvMsg =m_tcpSocket->readAll();
+     ui->log_show->append("client:"+recvMsg);
+}
+
+void MainWindow::on_connect_database_clicked()
+{
+    int temp;
+    temp=my_database->database_connect();
 
 }

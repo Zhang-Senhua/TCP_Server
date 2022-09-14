@@ -29,12 +29,18 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    servert.cpp
+    database.cpp \
+    serverthread.cpp \
+    mysocket.cpp \
+    server.cpp
 
 HEADERS += \
         mainwindow.h \
     database_connect.h \
-    servert.h
+    database.h \
+    serverthread.h \
+    mysocket.h \
+    server.h
 
 FORMS += \
         mainwindow.ui
