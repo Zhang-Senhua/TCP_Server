@@ -3,9 +3,13 @@
 
 #include <QMainWindow>
 
-#include <QTcpServer>
-#include <QTcpSocket>
+#include<QTcpServer>
+#include<QTcpSocket>
 #include"database.h"
+#include<QThread>
+#include"serverthread.h"
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -37,12 +41,13 @@ private slots:
     void on_Send_data_clicked();
 
     void on_connect_database_clicked();
+    void ThreadSlots(QByteArray DATA,int client);
 
 private:
     Ui::MainWindow *ui;
     QTcpServer *m_tcpServer = nullptr;
-    QTcpSocket *m_tcpSocket = nullptr;
-     Database *my_database;
+    QTcpSocket  *m_tcpSocket = nullptr;
+    Database *my_database;
 
 };
 

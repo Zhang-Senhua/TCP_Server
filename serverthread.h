@@ -1,41 +1,30 @@
 #ifndef SERVERTHREAD_H
 #define SERVERTHREAD_H
-
-#include <QThread>
 #include <QObject>
-#include <QtNetwork>
+#include <QWidget>
+#include <QThread>
+#include <QTcpSocket>
 #include <QDebug>
 
-#include "mysocket.h"
-
-class Socket;
-
-class serverThread : public QThread
+class Serverthread: public QThread
 {
     Q_OBJECT
 public:
-    serverThread(int sockDesc, QObject *parent = Q_NULLPTR);
-    ~serverThread();
-
-private:
-    void run(void);
-
-public slots:
-    void sendDataSlot(int sockDesc, const QByteArray &data);
+     explicit Serverthread(QTcpSocket *Socket);
+     void run();
 
 signals:
-    void dataReady(const QString &ip, const QByteArray &data);
-    void sendData(int sockDesc, const QByteArray &data);
-    void disconnectTCP(int sockDesc);
+    void SendToWidget(QByteArray ba,int client);
 
-private slots:   
-    void recvDataSlot(const QString &ip, const QByteArray &data);
-    void disconnectToHost(void);
+public slots:
+    void ClientinfoSlots();
+    //void Thread_slot();
 
 private:
-    MySocket *m_socket;
+    QTcpSocket *sock;
 
-    int m_sockDesc;
+
+
 };
 
 #endif // SERVERTHREAD_H

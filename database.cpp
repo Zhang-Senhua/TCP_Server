@@ -14,7 +14,7 @@ Database::~Database()
 }
 
 bool Database::database_connect(){
-
+//使用QOBDC连接到本地的服务器
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
     db.setHostName("localhost");
     db.setDatabaseName("Data_Radar");       //这里输入你的数据库名

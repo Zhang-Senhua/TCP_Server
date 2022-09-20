@@ -1,52 +1,20 @@
 #include "serverthread.h"
 
-serverThread::serverThread(int sockDesc, QObject *parent) :
-    QThread(parent),
-    m_sockDesc(sockDesc)
+Serverthread::Serverthread(QTcpSocket *Socket)
 {
+    sock=Socket;
 
 }
 
-serverThread::~serverThread()
+void Serverthread::run()
 {
-    m_socket->close();
+      connect(sock,&QTcpSocket::readyRead,this,&Serverthread::ClientinfoSlots);
 }
 
-void serverThread::run(void)
+void Serverthread::ClientinfoSlots()
 {
-    m_socket = new MySocket(m_sockDesc);
+    QByteArray BUF=sock->readAll();
+    int client_num=sock->peerPort();
+    emit SendToWidget(BUF,client_num);
 
-    if (!m_socket->setSocketDescriptor(m_sockDesc)) {
-        return ;
-    }
-
-    connect(m_socket, &MySocket::disconnected, this, &serverThread::disconnectToHost);
-    connect(m_socket, SIGNAL(dataReady(const QString&, const QByteArray&)),
-            this, SLOT(recvDataSlot(const QString&, const QByteArray&)));
-    connect(this, SIGNAL(sendData(int, const QByteArray&)),
-            m_socket, SLOT(sendData(int, const QByteArray&)));
-
-    this->exec();
-}
-
-void serverThread::sendDataSlot(int sockDesc, const QByteArray &data)
-{
-    if (data.isEmpty()) {
-        return ;
-    }
-    emit sendData(sockDesc, data);
-}
-
-void serverThread::recvDataSlot(const QString &ip, const QByteArray &data)
-{
-
-
-
-}
-
-void serverThread::disconnectToHost(void)
-{
-    emit disconnectTCP(m_sockDesc);
-    m_socket->disconnectFromHost();
-    this->quit();
 }

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[11];
-    char stringdata0[186];
+    QByteArrayData data[14];
+    char stringdata0[210];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,14 +41,18 @@ QT_MOC_LITERAL(6, 98, 11), // "onConnected"
 QT_MOC_LITERAL(7, 110, 14), // "onDisConnected"
 QT_MOC_LITERAL(8, 125, 11), // "onReadyRead"
 QT_MOC_LITERAL(9, 137, 20), // "on_Send_data_clicked"
-QT_MOC_LITERAL(10, 158, 27) // "on_connect_database_clicked"
+QT_MOC_LITERAL(10, 158, 27), // "on_connect_database_clicked"
+QT_MOC_LITERAL(11, 186, 11), // "ThreadSlots"
+QT_MOC_LITERAL(12, 198, 4), // "DATA"
+QT_MOC_LITERAL(13, 203, 6) // "client"
 
     },
     "MainWindow\0on_start_server_clicked\0\0"
     "on_stop_server_clicked\0on_clear_data_clicked\0"
     "on_newConnection\0onConnected\0"
     "onDisConnected\0onReadyRead\0"
-    "on_Send_data_clicked\0on_connect_database_clicked"
+    "on_Send_data_clicked\0on_connect_database_clicked\0"
+    "ThreadSlots\0DATA\0client"
 };
 #undef QT_MOC_LITERAL
 
@@ -58,7 +62,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -66,15 +70,16 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   59,    2, 0x08 /* Private */,
-       3,    0,   60,    2, 0x08 /* Private */,
-       4,    0,   61,    2, 0x08 /* Private */,
-       5,    0,   62,    2, 0x08 /* Private */,
-       6,    0,   63,    2, 0x08 /* Private */,
-       7,    0,   64,    2, 0x08 /* Private */,
-       8,    0,   65,    2, 0x08 /* Private */,
-       9,    0,   66,    2, 0x08 /* Private */,
-      10,    0,   67,    2, 0x08 /* Private */,
+       1,    0,   64,    2, 0x08 /* Private */,
+       3,    0,   65,    2, 0x08 /* Private */,
+       4,    0,   66,    2, 0x08 /* Private */,
+       5,    0,   67,    2, 0x08 /* Private */,
+       6,    0,   68,    2, 0x08 /* Private */,
+       7,    0,   69,    2, 0x08 /* Private */,
+       8,    0,   70,    2, 0x08 /* Private */,
+       9,    0,   71,    2, 0x08 /* Private */,
+      10,    0,   72,    2, 0x08 /* Private */,
+      11,    2,   73,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -86,6 +91,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QByteArray, QMetaType::Int,   12,   13,
 
        0        // eod
 };
@@ -105,10 +111,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 6: _t->onReadyRead(); break;
         case 7: _t->on_Send_data_clicked(); break;
         case 8: _t->on_connect_database_clicked(); break;
+        case 9: _t->ThreadSlots((*reinterpret_cast< QByteArray(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObject MainWindow::staticMetaObject = {
@@ -136,13 +142,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 9;
+        _id -= 10;
     }
     return _id;
 }

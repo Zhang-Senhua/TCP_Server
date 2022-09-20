@@ -83,19 +83,28 @@ void MainWindow::on_clear_data_clicked()
 void MainWindow::on_newConnection()
 {
     static int count=0;
+
     m_tcpSocket = m_tcpServer->nextPendingConnection();
     count++;
     connect(m_tcpSocket,&QTcpSocket::connected,this,&MainWindow::onConnected);
     connect(m_tcpSocket,&QTcpSocket::disconnected,this,&MainWindow::onDisConnected);
    // connect(m_tcpSocket,&QTcpSocket::stateChanged,this,&MainWindow::onStateChanged);
-    connect(m_tcpSocket,&QTcpSocket::readyRead,this,&MainWindow::onReadyRead);
+ //   connect(m_tcpSocket,&QTcpSocket::readyRead,this,&MainWindow::onReadyRead);
+    Serverthread *thread_server=new Serverthread(m_tcpSocket);
+   thread_server->start();
+   connect(thread_server,&Serverthread::SendToWidget,this,&MainWindow::ThreadSlots);
+  //  serverThread *server_thread=new serverThread(m_tcpSocket);
     ui->log_show->append("** client socket connected");
     ui->log_show->append("** peer address: "+m_tcpSocket->peerAddress().toString());
     ui->log_show->append("** peer port: "+QString::number(m_tcpSocket->peerPort()));
   // qDebug()<<count;
 }
 
+void MainWindow::ThreadSlots(QByteArray DATA,int client)
+{
+     ui->log_show->append("client:"+QString::number(client)+"  "+DATA);
 
+}
 void MainWindow::onConnected()
 {
     ui->log_show->append("** client socket connected");

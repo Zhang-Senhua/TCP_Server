@@ -30,17 +30,13 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     database.cpp \
-    serverthread.cpp \
-    mysocket.cpp \
-    server.cpp
+    serverthread.cpp
 
 HEADERS += \
         mainwindow.h \
     database_connect.h \
     database.h \
-    serverthread.h \
-    mysocket.h \
-    server.h
+    serverthread.h
 
 FORMS += \
         mainwindow.ui
