@@ -90,6 +90,8 @@ void MainWindow::on_newConnection()
     connect(m_tcpSocket,&QTcpSocket::disconnected,this,&MainWindow::onDisConnected);
    // connect(m_tcpSocket,&QTcpSocket::stateChanged,this,&MainWindow::onStateChanged);
  //   connect(m_tcpSocket,&QTcpSocket::readyRead,this,&MainWindow::onReadyRead);
+
+    //使用多线程访问
     Serverthread *thread_server=new Serverthread(m_tcpSocket);
    thread_server->start();
    connect(thread_server,&Serverthread::SendToWidget,this,&MainWindow::ThreadSlots);

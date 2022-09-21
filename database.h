@@ -13,6 +13,8 @@ public:
     Database();
     ~Database();
     static bool database_connect();
+private:
+
 
 
 

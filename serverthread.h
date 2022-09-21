@@ -12,6 +12,7 @@ class Serverthread: public QThread
 public:
      explicit Serverthread(QTcpSocket *Socket);
      void run();
+     void Protocol_analy(); //协议解析的函数
 
 signals:
     void SendToWidget(QByteArray ba,int client);
