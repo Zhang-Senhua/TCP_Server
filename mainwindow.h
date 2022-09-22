@@ -48,6 +48,7 @@ private:
     QTcpServer *m_tcpServer = nullptr;
     QTcpSocket  *m_tcpSocket = nullptr;
     Database *my_database;
+    int count;//用于计算连接设备数
 
 };
 

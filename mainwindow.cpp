@@ -82,7 +82,7 @@ void MainWindow::on_clear_data_clicked()
 
 void MainWindow::on_newConnection()
 {
-    static int count=0;
+
 
     m_tcpSocket = m_tcpServer->nextPendingConnection();
     count++;
@@ -99,11 +99,14 @@ void MainWindow::on_newConnection()
     ui->log_show->append("** client socket connected");
     ui->log_show->append("** peer address: "+m_tcpSocket->peerAddress().toString());
     ui->log_show->append("** peer port: "+QString::number(m_tcpSocket->peerPort()));
+    ui->device_numbers->clear();
+    ui->device_numbers->setPlainText(QString::number(count));
   // qDebug()<<count;
 }
 
 void MainWindow::ThreadSlots(QByteArray DATA,int client)
 {
+    //线程返回数据
      ui->log_show->append("client:"+QString::number(client)+"  "+DATA);
 
 }
@@ -117,6 +120,9 @@ void MainWindow::onConnected()
 void MainWindow::onDisConnected()
 {
     ui->log_show->append("** client socket disconnected");
+    count--;
+    ui->device_numbers->clear();
+    ui->device_numbers->setPlainText(QString::number(count));
     m_tcpSocket->deleteLater();
 }
 
