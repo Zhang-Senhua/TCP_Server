@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QTcpSocket>
 #include <QDebug>
+#include"database.h"
 
 class Serverthread: public QThread
 {
@@ -14,6 +15,14 @@ public:
      void run();
     void protocol(QByteArray buffer);//协议解析的函数
      QByteArray Origin_data;//用于截取数据帧中的数据段
+     void data_analy(QByteArray DATA);
+     Database *mysql_data;
+     int device_id;//设备id
+     int on_bed;//1表示在床，0表示离床
+     int body_move;//1表示存在体动，0表示不存在体动
+     int heart_rate;//表示心率
+     int breath_rate;//表示呼吸率
+     long int log_time;//时间戳,时间戳是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总秒数。
 
 signals:
     void SendToWidget(QByteArray ba,int client);

@@ -107,7 +107,8 @@ void MainWindow::on_newConnection()
 void MainWindow::ThreadSlots(QByteArray DATA,int client)
 {
     //线程返回数据
-     ui->log_show->append("client:"+QString::number(client)+"  "+DATA);
+
+     ui->log_show->append("client:"+QString::number(client)+"  "+DATA.toHex());
 
 }
 void MainWindow::onConnected()

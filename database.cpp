@@ -1,5 +1,6 @@
 #include "database.h"
 #define data_length 12
+QSqlDatabase  Database::db=QSqlDatabase::addDatabase("QODBC");
 Database::Database()
 {
 
@@ -16,7 +17,7 @@ Database::~Database()
 bool Database::database_connect(){
 //使用QOBDC连接到本地的服务器
     bool command;
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+  //  Database::db = QSqlDatabase::addDatabase("QODBC");
     db.setHostName("localhost");
     db.setDatabaseName("Data_Radar");       //这里输入你的数据库名
     db.setUserName("root");
@@ -47,6 +48,30 @@ bool Database::database_connect(){
     }
 }
 
+//将解析出来的数据插入数据库
+bool Database::data_insert( int device_id, int on_bed,int body_move,int heart_rate,int breath_rate,long int log_time)
+{
+
+   QDateTime LOG_TIME= QDateTime::fromTime_t(log_time);
+   string_time=LOG_TIME.toString("yyyy-MM-dd hh:mm:ss");
+  // qDebug()<<string_time;
+   QSqlQuery query(db);
+   QString insert_cmd;
+   insert_cmd=QString("INSERT INTO Sleep(id,off_bed,body_move,heart_rate,breath_rate,log_time) VALUES('%1','%2','%3','%4','%5','%6')").arg(device_id).arg(on_bed).arg(body_move).arg(heart_rate).arg(breath_rate).arg(string_time);
+   if(!query.exec(insert_cmd))
+   {
+      qDebug()<<("ERROR:"+query.lastError().text());
+       return 0;
+   }else {
+       return 1;
+
+}
+
+
+
+
+}
+
 void Database::protocol(QByteArray buffer)
 {
     //函数的作用，封装数据
@@ -74,7 +99,7 @@ void Database::protocol(QByteArray buffer)
         while(is_packet){
               switch(state){
                 case is_long_enough: {
-                                if(data_length =< buf_judge.length()){
+                                if(data_length <= buf_judge.length()){
                                     is_packet = true; //当用于判断的数据包长度大于等于12时才进行判断
                                     state = is_head;
                                     //qDebug() <<"is_long_enough";
@@ -123,7 +148,7 @@ void Database::protocol(QByteArray buffer)
                                for(int i=0;i<10;i++)
                                {
                                    Origin_data[i]=buf_judge[2+i];
-                                   qDebug(Origin_data[i]);
+                                   qDebug()<<Origin_data[i];
                                }
                               // qDebug()<<temp1.toInt(NULL,16);
                                buf_judge = buf_judge.right(buf_judge.length()-12);

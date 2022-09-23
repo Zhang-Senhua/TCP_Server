@@ -2,8 +2,10 @@
 #define DATABASE_H
 #include <QMessageBox>
 #include <QSqlDatabase>
+#include<QSqlError>
 #include <QSqlQuery>
 #include<QtDebug>
+#include<QTime>
 class Database
 {
 
@@ -16,10 +18,17 @@ public:
     int breath_rate;//表示呼吸率
     long int log_time;//时间戳,时间戳是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总秒数。
     QByteArray Origin_data;//用于截取数据帧中的数据段
+    static QSqlDatabase db ;//需要使用静态约束
+    QString string_time;
     Database();
     ~Database();
     static bool database_connect();
     void protocol(QByteArray buffer);
+    bool data_insert( int device_id, int on_bed,
+    int body_move,int heart_rate,
+    int breath_rate,long int log_time);
+
+
 
 private:
      enum State{is_long_enough,is_head,is_end,is_data};// 列举数据包解析存在的状态

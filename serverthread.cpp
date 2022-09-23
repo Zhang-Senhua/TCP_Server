@@ -1,10 +1,12 @@
 #include "serverthread.h"
 #include<QtDebug>
 #define data_length 12
+#define TURE 1
 
 Serverthread::Serverthread(QTcpSocket *Socket)
 {
     sock=Socket;
+    mysql_data=new Database();
 
 }
 
@@ -18,9 +20,42 @@ void Serverthread::ClientinfoSlots()
     QByteArray BUF=sock->readAll();
     //读取出来后，进行协议的解析
     protocol(BUF);
+    qDebug()<<BUF.toHex();
+    data_analy(Origin_data);
+    if(!mysql_data->data_insert(device_id,on_bed,body_move,heart_rate,breath_rate,log_time))
+    {
+        qDebug("数据插入失败！\r\n");
+
+
+    }
     int client_num=sock->peerPort();
     emit SendToWidget(Origin_data,client_num);
 
+}
+
+void Serverthread::data_analy(QByteArray DATA)
+{
+    QByteArray ID;//设备id
+    QByteArray On_Bed;//1表示在床，0表示离床
+    QByteArray Body_Move;//1表示存在体动，0表示不存在体动
+    QByteArray Heart_Rate;//表示心率
+    QByteArray Breath_Rate;//表示呼吸率
+    QByteArray Log_time;//时间戳,时间戳是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总秒数。
+    ID=DATA.mid(0,1);
+   // qDebug()<< DATA.toHex();
+    On_Bed=DATA.mid(1,1);
+    Body_Move=DATA.mid(2,1);
+    Breath_Rate=DATA.mid(3,1);
+    Heart_Rate=DATA.mid(4,1);
+    Log_time=DATA.mid(5,4);
+    qDebug()<< Log_time.toHex();
+    device_id=ID.toHex().toInt(NULL,16);
+    on_bed=On_Bed.toHex().toInt(NULL,16);
+    body_move=Body_Move.toHex().toInt(NULL,16);
+    heart_rate=Heart_Rate.toHex().toInt(NULL,16);
+    breath_rate=Breath_Rate.toHex().toInt(NULL,16);
+    log_time=Log_time.toHex().toInt(NULL,16);
+    //qDebug()<< log_time;
 }
 
 void Serverthread::protocol(QByteArray buffer)
@@ -38,8 +73,8 @@ void Serverthread::protocol(QByteArray buffer)
      static int index=0;
     QByteArray Not_Completed;
     buf_receive =buffer;
-    number_pac=buffer.length()/10;
-    qDebug()<< number_pac;
+    number_pac=buffer.length()/12;
+    qDebug()<< buffer.length();
    // qDebug()<<buffer.toHex();
     buf_judge = buf_remained.append(buf_receive);// 将上次剩余的数据流和现在接收到的数据流拼接起来
     //UI->Send_text_window->clear();//调试用
@@ -96,10 +131,11 @@ void Serverthread::protocol(QByteArray buffer)
                                 }
                              }break;
                 case is_data:{
-                               for(int i=0;i<10;i++)
+                               for(int i=0;i<9;i++)
                                {
-                                   Origin_data[i]=buf_judge[2+i];
-                                   qDebug()<<Origin_data[i];
+                                   Origin_data[i]=buf_judge[1+i];
+                                 //  qDebug()<<Origin_data[i];
+
                                }
                               // qDebug()<<temp1.toInt(NULL,16);
                                buf_judge = buf_judge.right(buf_judge.length()-12);
