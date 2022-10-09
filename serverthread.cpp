@@ -20,7 +20,7 @@ void Serverthread::ClientinfoSlots()
     QByteArray BUF=sock->readAll();
     //读取出来后，进行协议的解析
     protocol(BUF);
-    qDebug()<<BUF.toHex();
+  //  qDebug()<<BUF.toHex();
     data_analy(Origin_data);
     if(!mysql_data->data_insert(device_id,on_bed,body_move,heart_rate,breath_rate,log_time))
     {
@@ -41,20 +41,24 @@ void Serverthread::data_analy(QByteArray DATA)
     QByteArray Heart_Rate;//表示心率
     QByteArray Breath_Rate;//表示呼吸率
     QByteArray Log_time;//时间戳,时间戳是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总秒数。
+    QDateTime time_test=QDateTime::currentDateTime();//用于测试
+    int TIME_TEST=time_test.toTime_t();
     ID=DATA.mid(0,1);
-   // qDebug()<< DATA.toHex();
+   //qDebug()<< DATA.toHex();
     On_Bed=DATA.mid(1,1);
     Body_Move=DATA.mid(2,1);
     Breath_Rate=DATA.mid(3,1);
     Heart_Rate=DATA.mid(4,1);
     Log_time=DATA.mid(5,4);
-    qDebug()<< Log_time.toHex();
+    //qDebug()<< Log_time.toHex();
     device_id=ID.toHex().toInt(NULL,16);
     on_bed=On_Bed.toHex().toInt(NULL,16);
     body_move=Body_Move.toHex().toInt(NULL,16);
     heart_rate=Heart_Rate.toHex().toInt(NULL,16);
     breath_rate=Breath_Rate.toHex().toInt(NULL,16);
-    log_time=Log_time.toHex().toInt(NULL,16);
+    //log_time=Log_time.toHex().toInt(NULL,16);
+
+    log_time=TIME_TEST;//用于测试
     //qDebug()<< log_time;
 }
 
@@ -64,17 +68,17 @@ void Serverthread::protocol(QByteArray buffer)
     QByteArray buf_receive; //用于缓存串口新接收到的数据
     QByteArray buf_judge;   //用于存储待解析数据
     QByteArray temp1;
-     static int index_vector=0;
+    static int index_vector=0;
     bool is_packet;      // 判断是否符合数据包的格式
     static int state; // enum枚举类型state所列举的项在程序编译的时候系统会自动给相应的标识字符串赋予一个常量整形值（const）
     state = is_long_enough;    // 因此可将begin等直接赋值于static int 的state
     QByteArray TEMP;
     int number_pac;
-     static int index=0;
+    static int index=0;
     QByteArray Not_Completed;
     buf_receive =buffer;
     number_pac=buffer.length()/12;
-    qDebug()<< buffer.length();
+   // qDebug()<< buffer.length();
    // qDebug()<<buffer.toHex();
     buf_judge = buf_remained.append(buf_receive);// 将上次剩余的数据流和现在接收到的数据流拼接起来
     //UI->Send_text_window->clear();//调试用

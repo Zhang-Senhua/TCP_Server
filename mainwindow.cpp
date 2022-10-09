@@ -77,7 +77,9 @@ void MainWindow::on_stop_server_clicked()
 
 void MainWindow::on_clear_data_clicked()
 {
-
+    ui->log_show->clear();
+    
+    //清楚log打印数据
 }
 
 void MainWindow::on_newConnection()
@@ -89,7 +91,7 @@ void MainWindow::on_newConnection()
     connect(m_tcpSocket,&QTcpSocket::connected,this,&MainWindow::onConnected);
     connect(m_tcpSocket,&QTcpSocket::disconnected,this,&MainWindow::onDisConnected);
    // connect(m_tcpSocket,&QTcpSocket::stateChanged,this,&MainWindow::onStateChanged);
- //   connect(m_tcpSocket,&QTcpSocket::readyRead,this,&MainWindow::onReadyRead);
+  // connect(m_tcpSocket,&QTcpSocket::readyRead,this,&MainWindow::onReadyRead);
 
     //使用多线程访问
     Serverthread *thread_server=new Serverthread(m_tcpSocket);
@@ -108,7 +110,7 @@ void MainWindow::ThreadSlots(QByteArray DATA,int client)
 {
     //线程返回数据
 
-     ui->log_show->append("client:"+QString::number(client)+"  "+DATA.toHex());
+    // ui->log_show->append("client:"+QString::number(client)+"  "+DATA.toHex());
 
 }
 void MainWindow::onConnected()
@@ -139,7 +141,7 @@ void MainWindow::on_Send_data_clicked()
 void MainWindow::onReadyRead()
 {
      QString recvMsg =m_tcpSocket->readAll();
-     ui->log_show->append("client:"+recvMsg);
+   //  ui->log_show->append("client:"+recvMsg);
 }
 
 void MainWindow::on_connect_database_clicked()

@@ -14,6 +14,12 @@ Database::~Database()
 
 }
 
+/*
+对于雷达的数据传输储存需求，单台设备40ms一条数据，一晚的数据在72万条左右，需要
+采取分库分表的策略进行存储，否则当数据量超过千万级别时，读写性能将严重下降，甚至
+会出现崩溃，出现数据丢失。
+
+*/
 bool Database::database_connect(){
 //使用QOBDC连接到本地的服务器
     bool command;
@@ -51,7 +57,7 @@ bool Database::database_connect(){
 //将解析出来的数据插入数据库
 bool Database::data_insert( int device_id, int on_bed,int body_move,int heart_rate,int breath_rate,long int log_time)
 {
-
+   QString string_time;
    QDateTime LOG_TIME= QDateTime::fromTime_t(log_time);
    string_time=LOG_TIME.toString("yyyy-MM-dd hh:mm:ss");
   // qDebug()<<string_time;
@@ -66,9 +72,6 @@ bool Database::data_insert( int device_id, int on_bed,int body_move,int heart_ra
        return 1;
 
 }
-
-
-
 
 }
 
@@ -88,7 +91,7 @@ void Database::protocol(QByteArray buffer)
     QByteArray Not_Completed;
     buf_receive =buffer;
     number_pac=buffer.length()/10;
-    qDebug()<< number_pac;
+   // qDebug()<< number_pac;
    // qDebug()<<buffer.toHex();
     buf_judge = buf_remained.append(buf_receive);// 将上次剩余的数据流和现在接收到的数据流拼接起来
     //UI->Send_text_window->clear();//调试用
