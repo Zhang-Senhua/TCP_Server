@@ -114,7 +114,7 @@ void Database::protocol(QByteArray buffer)
                                     //UI->Send_text_window->append(QString::number(buf_remained.length()));
                                     //UI->Send_text_window->append(buf_remained.toHex());// 调试用
                                   //  qDebug() <<"isn't_long_enough";
-                                    return ;   //当数据包长度小于7时保存到下次，然后直接退出这个函数
+                                    return ;   //当数据包长度D小于7时保存到下次，然后直接退出这个函数
                                 }
                              }break;
                 case is_head:{

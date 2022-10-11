@@ -19,7 +19,7 @@ public:
     long int log_time;//时间戳,时间戳是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总秒数。
     QByteArray Origin_data;//用于截取数据帧中的数据段
     static QSqlDatabase db ;//需要使用静态约束
-    QString string_time;
+    
     Database();
     ~Database();
     static bool database_connect();

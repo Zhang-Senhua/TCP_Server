@@ -57,7 +57,6 @@ void Serverthread::data_analy(QByteArray DATA)
     heart_rate=Heart_Rate.toHex().toInt(NULL,16);
     breath_rate=Breath_Rate.toHex().toInt(NULL,16);
     //log_time=Log_time.toHex().toInt(NULL,16);
-
     log_time=TIME_TEST;//用于测试
     //qDebug()<< log_time;
 }
