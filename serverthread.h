@@ -13,7 +13,7 @@ class Serverthread: public QThread
 public:
      explicit Serverthread(QTcpSocket *Socket);
      void run();
-    void protocol(QByteArray buffer);//协议解析的函数
+     void protocol(QByteArray buffer);//协议解析的函数
      QByteArray Origin_data;//用于截取数据帧中的数据段
      void data_analy(QByteArray DATA);
      Database *mysql_data;
